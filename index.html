@@ -214,11 +214,11 @@
                         type="tel"
                         id="whatsapp_number"
                         name="whatsapp_number"
-                        placeholder="Ex: 5511999999999"
+                        placeholder="Ex: 5511999999999 ou 1555551234"
                         required
                     >
                     <p class="hint">
-                        Inclua o código do país (55 para Brasil) + DDD + número
+                        Inclua o código do país + número (BR: 55 + DDD + número)
                     </p>
                 </div>
 
@@ -295,13 +295,20 @@
 
             let whatsapp = document.getElementById('whatsapp_number').value.replace(/\D/g, '');
 
-            // Normaliza o número: adiciona 55 se não tiver código do país
-            if (whatsapp.length === 11 && !whatsapp.startsWith('55')) {
-                // Número brasileiro sem código do país (DDD + 9 dígitos)
-                whatsapp = '55' + whatsapp;
-            } else if (whatsapp.length === 10 && !whatsapp.startsWith('55')) {
-                // Número brasileiro sem código do país (DDD + 8 dígitos - fixo)
-                whatsapp = '55' + whatsapp;
+            // Normaliza números brasileiros: adiciona 55 se parecer ser BR sem código
+            // DDD brasileiro: 11-99, número celular: 9 dígitos
+            if (whatsapp.length === 11) {
+                const ddd = parseInt(whatsapp.substring(0, 2));
+                if (ddd >= 11 && ddd <= 99) {
+                    // Provavelmente brasileiro sem código do país
+                    whatsapp = '55' + whatsapp;
+                }
+            } else if (whatsapp.length === 10) {
+                const ddd = parseInt(whatsapp.substring(0, 2));
+                if (ddd >= 11 && ddd <= 99) {
+                    // Brasileiro fixo sem código do país
+                    whatsapp = '55' + whatsapp;
+                }
             }
 
             const formData = {
@@ -310,15 +317,9 @@
                 email: document.getElementById('email').value.trim()
             };
 
-            // Validação do WhatsApp (deve ter 12-13 dígitos: 55 + DDD + número)
-            if (formData.whatsapp_number.length < 12 || formData.whatsapp_number.length > 13) {
-                showMessage('Número de WhatsApp inválido. Use o formato: 5511999999999 (código do país + DDD + número).', 'error');
-                setLoading(false);
-                return;
-            }
-
-            if (!formData.whatsapp_number.startsWith('55')) {
-                showMessage('Por favor, use um número brasileiro com código 55.', 'error');
+            // Validação: mínimo 10 dígitos (código país + número)
+            if (formData.whatsapp_number.length < 10) {
+                showMessage('Número de WhatsApp inválido. Inclua o código do país + número completo.', 'error');
                 setLoading(false);
                 return;
             }
