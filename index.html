@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro - Comunidade VIP</title>
+    <title>Comunidade VIP - Dr. Alain Dutra</title>
     <style>
         * {
             margin: 0;
@@ -161,6 +161,12 @@
             font-size: 0.85rem;
         }
 
+        .footer a {
+            color: #ff0000;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
         .loading {
             display: inline-block;
             width: 20px;
@@ -201,25 +207,6 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="youtube_channel_id">
-                        ID do seu Canal do YouTube <span class="required">*</span>
-                    </label>
-                    <input
-                        type="text"
-                        id="youtube_channel_id"
-                        name="youtube_channel_id"
-                        placeholder="Ex: UCxxxxxxxxxxxxxxxxxx"
-                        required
-                    >
-                    <p class="hint">
-                        Não sabe seu ID?
-                        <a href="https://www.youtube.com/account_advanced" target="_blank">
-                            Clique aqui para descobrir
-                        </a>
-                    </p>
-                </div>
-
-                <div class="form-group">
                     <label for="whatsapp_number">
                         WhatsApp <span class="required">*</span>
                     </label>
@@ -257,12 +244,11 @@
         </div>
 
         <div class="footer">
-            Apenas membros verificados do canal receberão acesso ao grupo.
+            Exclusivo para membros do canal <a href="https://youtube.com/@dralaindutra" target="_blank">@dralaindutra</a>
         </div>
     </div>
 
     <script>
-        // CONFIGURE AQUI A URL DO SEU WEBHOOK N8N
         const WEBHOOK_URL = 'https://n8n.drsolution.online/webhook/youtube-member-onboarding';
 
         const form = document.getElementById('onboardingForm');
@@ -281,7 +267,7 @@
         function setLoading(loading) {
             if (loading) {
                 submitBtn.disabled = true;
-                submitBtn.innerHTML = '<span class="loading"></span> Verificando...';
+                submitBtn.innerHTML = '<span class="loading"></span> Enviando...';
             } else {
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = `
@@ -306,18 +292,11 @@
 
             const formData = {
                 display_name: document.getElementById('display_name').value.trim(),
-                youtube_channel_id: document.getElementById('youtube_channel_id').value.trim(),
                 whatsapp_number: document.getElementById('whatsapp_number').value.replace(/\D/g, ''),
                 email: document.getElementById('email').value.trim()
             };
 
-            // Validação básica
-            if (!formData.youtube_channel_id.startsWith('UC')) {
-                showMessage('O ID do canal do YouTube deve começar com "UC". Verifique e tente novamente.', 'error');
-                setLoading(false);
-                return;
-            }
-
+            // Validação do WhatsApp
             if (formData.whatsapp_number.length < 10) {
                 showMessage('Número de WhatsApp inválido. Inclua o código do país + DDD + número.', 'error');
                 setLoading(false);
