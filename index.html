@@ -235,6 +235,19 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="youtube_display_name">
+                        Seu nome no YouTube (opcional)
+                    </label>
+                    <input
+                        type="text"
+                        id="youtube_display_name"
+                        name="youtube_display_name"
+                        placeholder="Como seu nome aparece no canal"
+                    >
+                    <p class="hint">É o nome exibido quando você comenta em vídeos ou na sua página de canal.</p>
+                </div>
+
+                <div class="form-group">
                     <label for="youtube_channel_url">
                         Link do seu canal do YouTube (opcional)
                     </label>
@@ -334,6 +347,7 @@
                 display_name: document.getElementById('display_name').value.trim(),
                 whatsapp_number: whatsapp,
                 email: document.getElementById('email').value.trim(),
+                youtube_display_name: document.getElementById('youtube_display_name').value.trim(),
                 youtube_channel_url: document.getElementById('youtube_channel_url').value.trim()
             };
 
